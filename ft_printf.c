@@ -10,30 +10,30 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_print.h"
+#include "ft_printf.h"
 
-int	ft_printf(const char *format, )//返り値は出力された文字数
+int	ft_printf(const char *format, ...)//返り値は出力された文字数,...は可変長引数ですよ〜の合図
 {
-	va_list	ap;
+	va_list	ap構造体の呼び出し方がわかっていない;
 	int	count;//出力した文字数
+  t_format  fmt; //t_format型の変数fmt
+  int n;
+  char  c;
+  char  *s;
 
 	count = 0;
 	va_start(ap, format);
-	while (*fotmat)
+	while (*format)
 	{
 		if (*format == '%')//%を発見したら
 		{
-			init_format ;//とりま構造体リセット
+			fmt = init_format();//%を見つけるたびに構造体リセット
 			format++;//次の文字（d,s,c,など）を見て
 			if (*format == 'd')
-			       int n = va_arg(ap, int);
+			  n = va_arg(ap, int);
 			else if (*format == 'c')
-		 		char m = va_arg(ap,char);	
+		 		c = va_arg(ap, int);
+//C言語では ... で渡された引数は自動的に型が大きい方に変換されます。
+                   //これをデフォルト引数昇格と言います。
 			else if (*format == 's')
-
-
-			
-
-
-
-
+        s = va_arg(ap, int);
