@@ -23,6 +23,7 @@ int	ft_printf(const char *format, ...)//返り値は出力された文字数,...
   char  *s;//ポインタは8バイトなのでデフォルト引数昇格しない
   unsigned int  u;
   char  *tmp;//itoa用の一時変数
+  void  *ptr;
 
 	count = 0;
 	va_start(ap, format);//変数apに可変長引数が紐付けられる
@@ -69,13 +70,25 @@ int	ft_printf(const char *format, ...)//返り値は出力された文字数,...
         count += ft_strlen(tmp);
         free(tmp);
       }
-      else if (*format == 'x')
+      else if (*format == 'x')//16進数（小文字）で数値出力
       {
         u = va_arg(ap, unsigned int);
         ft_puthex_lowercase_fd(u, 1);
-        tmp = ft_itoa(u);
-        count += ft_strlen(tmp);
-        free(tmp);
+        count += ft_hexlen(u);
+      }
+
+      else if (*format == 'X')//16進数（大文字）で数値出力
+      {
+        u = va_arg(ap, unsigned int);
+        ft_puthex_uppercase_fd(u, 1);
+        count += ft_hexlen(u);
+      }
+      else if (*format == 'p')//変数がメモリのどこにあるか（アドレス）を16進数で出力
+      {
+        ptr = va_arg(ap, void *);//intでもcharでもどんな型でいいのでアドレスがほしいからvoid*
+        write(1, "0x", 2);//本物の％pの出力形式的に0xを冒頭につける（数値の表記方法を区別するために接頭辞）ex:二進数は「0b」
+        ft_puthex_ptr_fd((unsigned long)ptr, 1); //64bit環境では8バイトなので8バイトの型であるlong型にキャスト。void *(ポインタ)のままでは計算処理できないので、数値として扱える型にキャスト 
+        count += 2 +ft_ptr_hexlen((unsigned long)ptr);
       }
     } 
       else//%がついていない
@@ -125,10 +138,48 @@ void  ft_puthex_uppercase_fd(unsigned int n, int fd)
   write(fd, &base[n % 16], 1);
 }
 
-int ft_hexlen(unsigned int n)
+void  ft_puthex_ptr_fd(unsigned long n, int fd)// ft_puthex_lowercase_fdの引数をlong型に変えただけ
 {
+  char  *base;
 
+  base = "0123456789abcdef";
+  if (fd < 0)
+    return ;
+  if (n >= 16)
+    ft_puthex_ptr_fd(n / 16, fd);
+  write(fd, &base[n % 16], 1);
 }
+
+int ft_hexlen(unsigned int n)//itoaは10で割りながら桁数を調べているため、16進数用の桁数え関数
+{
+  int len_counter;
+
+  len_counter = 0;
+  if (n == 0)
+    return (1);
+  while (n > 0)
+  {
+    n = n / 16;
+    len_counter++;
+  }
+  return (len_counter);
+}
+
+int ft_ptr_hexlen(unsigned long n)//long型の引数に変えただけ
+{
+  int len_counter;
+
+  len_counter = 0;
+  if (n == 0)
+    return (1);
+  while (n > 0)
+  {
+    n = n / 16;
+    len_counter++;
+  }
+  return (len_counter);
+}
+
 int main(void)
 {
   int len;
