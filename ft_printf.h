@@ -22,7 +22,7 @@ typedef struct s_format
     int zero;     // 0
     int hash;     // #
     int plus;     // +
-    int space;    //
+    int space;
     int width_min;    // 最小フィールド幅
     int precision; // 精度
     int period;
@@ -34,7 +34,7 @@ t_format	init_format(void)
 {
 	t_format	fmt;//t_format型の変数fmtを作る
 //.は「この箱の中の〇〇」という意味
-	fmt.minus		= 0;//fmtのminusの入れ物に0を入れる
+	fmt.minus		= 0;//fmtのminusの入れ物（変数）に0を代入
 	fmt.zero		= 0;
 	fmt.hash		= 0;
 	fmt.plus		= 0;
@@ -45,4 +45,23 @@ t_format	init_format(void)
 	fmt.type		= '\0';
 	return (fmt);
 }
+
+t_format  init_format(void);
+void  ft_put_unsignedint_fd(unsigned int n, int fd);
+void  ft_puthex_lowercase_fd(unsigned int n, int fd);
+void  ft_puthex_uppercase_fd(unsigned int n, int fd);
+void  ft_puthex_ptr_fd(unsigned long n, int fd);
+
+int ft_int_strlen(int n);
+int ft_unsignedint_strlen(unsigned int n);
+int ft_hexlen(unsigned int n);
+int ft_ptr_hexlen(unsigned long n);
+
+void  parse_flags(const char **format, t_format *fmt);
+void  parse_width(const char **format, t_format *fmt);
+void  parse_precision(const char **format, t_format *fmt);
+
+int	ft_printf(const char *format, ...);
+
+
 #endif
