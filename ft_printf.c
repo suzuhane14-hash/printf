@@ -3,172 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omito <omito@student.42.fr>                +#+  +:+       +#+        */
+/*   By: omito <omito@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 17:28:49 by omito             #+#    #+#             */
-/*   Updated: 2026/06/09 22:17:16 by omito            ###   ########.fr       */
+/*   Created: 2026/06/13 01:38:01 by omito             #+#    #+#             */
+/*   Updated: 2026/06/13 01:53:20 by omito            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "libft.h"
-
-void  ft_put_unsignedint_fd(unsigned int n, int fd)//ft_putnbrのマイナス処理いらないバーション
-{
-  char  c;
-
-  if (fd < 0)
-    return ;
-  if (n >= 10)
-    ft_put_unsignedint_fd(n / 10, fd);
-  c = n % 10 + '0';
-  write(fd, &c, 1);
-}
-
-void  ft_puthex_lowercase_fd(unsigned int n, int fd)//unsigned intの理由…16進数をプログラミングで使う用途はメモリの中身（ビット列）を表示すること。メモリにマイナスの概念はない。
-{
-  char  *base;
-
-  base = "0123456789abcdef";
-  if (fd < 0)
-    return ;
-  if (n >= 16)
-    ft_puthex_lowercase_fd(n / 16, fd);
-  write(fd, &base[n % 16], 1);//16で割ったあまりが、最終的に出力したい16進数（bace）のインデックスと一致している
-}
-
-void  ft_puthex_uppercase_fd(unsigned int n, int fd)
-{
-  char  *base;
-
-  base = "0123456789ABCDEF";
-  if(fd < 0)
-    return ;
-  if (n >= 16)
-    ft_puthex_uppercase_fd(n / 16, fd);
-  write(fd, &base[n % 16], 1);
-}
-
-void  ft_puthex_ptr_fd(unsigned long n, int fd)// ft_puthex_lowercase_fdの引数をlong型に変えただけ
-{
-  char  *base;
-
-  base = "0123456789abcdef";
-  if (fd < 0)
-    return ;
-  if (n >= 16)
-    ft_puthex_ptr_fd(n / 16, fd);
-  write(fd, &base[n % 16], 1);
-}
-
-int ft_int_strlen(int n)
-{
-  int len_counter;
-  long  nbr;
-
-  len_counter = 0;
-  if (n == 0)
-    return (1);
-  nbr = n;
-  if (nbr < 0)
-  {
-    len_counter++;//-分カウント
-    nbr = -nbr;
-  }
-  while (nbr > 0)
-  {
-    nbr = nbr / 10;
-    len_counter++;
-  }
-  return (len_counter);
-}
-
-int ft_unsignedint_strlen(unsigned int n)
-{
-  int len_counter;
-
-  len_counter = 0;
-  if (n == 0)
-    return (1);
-  while (n > 0)
-  {
-    n = n / 10;
-    len_counter++;
-  }
-  return (len_counter);
-}
-
-int ft_hexlen(unsigned int n)//itoaは10で割りながら桁数を調べているため、16進数用の桁数え関数
-{
-  int len_counter;
-
-  len_counter = 0;
-  if (n == 0)
-    return (1);
-  while (n > 0)
-  {
-    n = n / 16;
-    len_counter++;
-  }
-  return (len_counter);
-}
-
-int ft_ptr_hexlen(unsigned long n)//long型の引数に変えただけ
-{
-  int len_counter;
-
-  len_counter = 0;
-  if (n == 0)
-    return (1);
-  while (n > 0)
-  {
-    n = n / 16;
-    len_counter++;
-  }
-  return (len_counter);
-}
-
-void  parse_flags(const char **format, t_format *fmt)//ヘルパー関数のなかでポインタを進めて、ポインタのアドレスを返したいので引数ダブルポインタ
-{
-  while (**format == '-' || **format == '0'
-    || **format == '+' || **format == '#' || **format == ' ')
-  {
-    if (**format == '-')
-      fmt->minus = 1;//構造体の変数fmtの中のminusというメンバに１を代入
-    else if (**format == '0')
-      fmt->zero = 1;
-    else if (**format == '#')
-      fmt->hash = 1;
-    else if (**format == '+')
-      fmt->plus = 1;
-    else if (**format == ' ')
-      fmt->space = 1;
-    (*format)++;//format文字列の次の文字に進む（ダブルポインタであることを忘れない）
-  } 
-}
-
-void  parse_width(const char **format, t_format *fmt)//幅を指定
-{
-  while (**format >= '0' && **format <= '9')
-  {
-    fmt->width_min = fmt->width_min * 10 + (**format - '0');//一桁ずつ読んでwidth_minを更新していくイメージ
-    (*format)++;
-  }
-}
-
-void  parse_precision(const char **format, t_format *fmt)//ピリオドが来たらその後の数字をprecisionに読み込む
-{
-  if (**format == '.')
-  {
-    fmt->period = 1;
-    (*format)++;
-    while (**format >= '0' && **format <= '9')
-    {
-      fmt->precision = fmt->precision * 10 + (**format - '0');
-      (*format)++;
-    } 
-  }
-}
 
 int	ft_printf(const char *format, ...)//返り値は出力された文字数,...は可変長引数ですよ〜の合図
 {
@@ -267,20 +110,20 @@ int	ft_printf(const char *format, ...)//返り値は出力された文字数,...
   return (count);
 }
 
-int main(void)
-{
-  int len;
-  int n = 123;
-  len = ft_printf("mori%s\n", "nikaeru");
-  ft_printf("count: %d\n", len);
-  ft_printf("%c\n", 'A');
-  ft_printf("%u\n", n);
-  ft_printf("%%\n");
-  ft_printf("%p\n", &n);
-  ft_printf("%i\n", n);
-  ft_printf("%u\n", n);
-  ft_printf("%x\n", n);
-  ft_printf("%X\n", n);
-
-  return (0);
-}
+//int main(void)
+//{
+//  int len;
+//  int n = 123;
+//  len = ft_printf("mori%s\n", "nikaeru");
+//  ft_printf("count: %d\n", len);
+//  ft_printf("%c\n", 'A');
+//  ft_printf("%u\n", n);
+//  ft_printf("%%\n");
+//  ft_printf("%p\n", &n);
+//  ft_printf("%i\n", n);
+//  ft_printf("%u\n", n);
+//  ft_printf("%x\n", n);
+//  ft_printf("%X\n", n);
+//
+//  return (0);
+//}
