@@ -13,6 +13,83 @@
 #include "ft_printf.h"
 #include "libft.h"
 
+void  ft_put_unsignedint_fd(unsigned int n, int fd)//ft_putnbrのマイナス処理いらないバーション
+{
+  char  c;
+
+  if (fd < 0)
+    return ;
+  if (n >= 10)
+    ft_put_unsignedint_fd(n / 10, fd);
+  c = n % 10 + '0';
+  write(fd, &c, 1);
+}
+
+void  ft_puthex_lowercase_fd(unsigned int n, int fd)//unsigned intの理由…16進数をプログラミングで使う用途はメモリの中身（ビット列）を表示すること。メモリにマイナスの概念はない。
+{
+  char  *base;
+
+  base = "0123456789abcdef";
+  if (fd < 0)
+    return ;
+  if (n >= 16)
+    ft_puthex_lowercase_fd(n / 16, fd);
+  write(fd, &base[n % 16], 1);//16で割ったあまりが、最終的に出力したい16進数（bace）のインデックスと一致している
+}
+
+void  ft_puthex_uppercase_fd(unsigned int n, int fd)
+{
+  char  *base;
+
+  base = "0123456789ABCDEF";
+  if(fd < 0)
+    return ;
+  if (n >= 16)
+    ft_puthex_uppercase_fd(n / 16, fd);
+  write(fd, &base[n % 16], 1);
+}
+
+void  ft_puthex_ptr_fd(unsigned long n, int fd)// ft_puthex_lowercase_fdの引数をlong型に変えただけ
+{
+  char  *base;
+
+  base = "0123456789abcdef";
+  if (fd < 0)
+    return ;
+  if (n >= 16)
+    ft_puthex_ptr_fd(n / 16, fd);
+  write(fd, &base[n % 16], 1);
+}
+
+int ft_hexlen(unsigned int n)//itoaは10で割りながら桁数を調べているため、16進数用の桁数え関数
+{
+  int len_counter;
+
+  len_counter = 0;
+  if (n == 0)
+    return (1);
+  while (n > 0)
+  {
+    n = n / 16;
+    len_counter++;
+  }
+  return (len_counter);
+}
+
+int ft_ptr_hexlen(unsigned long n)//long型の引数に変えただけ
+{
+  int len_counter;
+
+  len_counter = 0;
+  if (n == 0)
+    return (1);
+  while (n > 0)
+  {
+    n = n / 16;
+    len_counter++;
+  }
+  return (len_counter);
+}
 int	ft_printf(const char *format, ...)//返り値は出力された文字数,...は可変長引数ですよ〜の合図
 {
 	va_list ap;//可変長引数を管理する入れ物（変数）
@@ -102,84 +179,6 @@ int	ft_printf(const char *format, ...)//返り値は出力された文字数,...
   return (count);
 }
 
-void  ft_put_unsignedint_fd(unsigned int n, int fd)//ft_putnbrのマイナス処理いらないバーション
-{
-  char  c;
-
-  if (fd < 0)
-    return ;
-  if (n >= 10)
-    ft_put_unsignedint_fd(n / 10, fd);
-  c = n % 10 + '0';
-  write(fd, &c, 1);
-}
-
-void  ft_puthex_lowercase_fd(unsigned int n, int fd)//unsigned intの理由…16進数をプログラミングで使う用途はメモリの中身（ビット列）を表示すること。メモリにマイナスの概念はない。
-{
-  char  *base;
-
-  base = "0123456789abcdef";
-  if (fd < 0)
-    return ;
-  if (n >= 16)
-    ft_puthex_lowercase_fd(n / 16, fd);
-  write(fd, &base[n % 16], 1);//16で割ったあまりが、最終的に出力したい16進数（bace）のインデックスと一致している
-}
-
-void  ft_puthex_uppercase_fd(unsigned int n, int fd)
-{
-  char  *base;
-
-  base = "0123456789ABCDEF";
-  if(fd < 0)
-    return ;
-  if (n >= 16)
-    ft_puthex_uppercase_fd(n / 16, fd);
-  write(fd, &base[n % 16], 1);
-}
-
-void  ft_puthex_ptr_fd(unsigned long n, int fd)// ft_puthex_lowercase_fdの引数をlong型に変えただけ
-{
-  char  *base;
-
-  base = "0123456789abcdef";
-  if (fd < 0)
-    return ;
-  if (n >= 16)
-    ft_puthex_ptr_fd(n / 16, fd);
-  write(fd, &base[n % 16], 1);
-}
-
-int ft_hexlen(unsigned int n)//itoaは10で割りながら桁数を調べているため、16進数用の桁数え関数
-{
-  int len_counter;
-
-  len_counter = 0;
-  if (n == 0)
-    return (1);
-  while (n > 0)
-  {
-    n = n / 16;
-    len_counter++;
-  }
-  return (len_counter);
-}
-
-int ft_ptr_hexlen(unsigned long n)//long型の引数に変えただけ
-{
-  int len_counter;
-
-  len_counter = 0;
-  if (n == 0)
-    return (1);
-  while (n > 0)
-  {
-    n = n / 16;
-    len_counter++;
-  }
-  return (len_counter);
-}
-
 int main(void)
 {
   int len;
@@ -189,5 +188,11 @@ int main(void)
   ft_printf("%c\n", 'A');
   ft_printf("%u\n", n);
   ft_printf("%%\n");
+  ft_printf("%p\n", &n);
+  ft_printf("%i\n", n);
+  ft_printf("%u\n", n);
+  ft_printf("%x\n", n);
+  ft_printf("%X\n", n);
+
   return (0);
 }
