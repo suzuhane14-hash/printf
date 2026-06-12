@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #ifndef FT_PRINTF_H
-#define FT-PRINTF_H
+#define FT_PRINTF_H
 
 #include <stdarg.h>
 #include <unistd.h>
@@ -25,6 +25,7 @@ typedef struct s_format
     int space;    //
     int width_min;    // 最小フィールド幅
     int precision; // 精度
+    int period;
     char type;    // c, s, d, i, u, x, X, p, %
 } t_format;
 //printf("%d %s %c", 42, "hello", 'A');みたいに、複数の変換を連続して処理するので、一回一回構造体をリセットしたい
@@ -44,3 +45,4 @@ t_format	init_format(void)
 	fmt.type		= '\0';
 	return (fmt);
 }
+#endif
