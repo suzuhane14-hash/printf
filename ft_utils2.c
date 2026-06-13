@@ -12,7 +12,7 @@
 
 #include "ft_printf.h"
 
-int ft_int_strlen(int n)
+int ft_int_len(int n)
 {
   int len_counter;
   long  nbr;
@@ -34,7 +34,7 @@ int ft_int_strlen(int n)
   return (len_counter);
 }
 
-int ft_unsignedint_strlen(unsigned int n)
+int ft_unsignedint_len(unsigned int n)
 {
   int len_counter;
 

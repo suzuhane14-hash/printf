@@ -35,8 +35,8 @@ void  ft_puthex_lowercase_fd(unsigned int n, int fd);
 void  ft_puthex_uppercase_fd(unsigned int n, int fd);
 void  ft_puthex_ptr_fd(unsigned long n, int fd);
 
-int ft_int_strlen(int n);
-int ft_unsignedint_strlen(unsigned int n);
+int ft_int_len(int n);
+int ft_unsignedint_len(unsigned int n);
 int ft_hexlen(unsigned int n);
 int ft_ptr_hexlen(unsigned long n);
 
