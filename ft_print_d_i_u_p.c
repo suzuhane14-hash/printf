@@ -6,22 +6,32 @@
 /*   By: omito <omito@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/13 10:27:44 by omito             #+#    #+#             */
-/*   Updated: 2026/06/13 11:55:21 by omito            ###   ########.fr       */
+/*   Updated: 2026/06/13 12:10:52 by omito            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int print_d_i(int n)
+int print_d_i(int n, t_format fmt)
 {
-  ft_putnbr_fd(n, 1);
-  return (ft_int_len(n));
+  char  *str;
+  int len;
+
+  str = ft_itoa(n);//数値から文字列変換
+  len = print_format(str, fmt);//文字列を幅と揃えを適応して出力
+  free(str);
+  return (len);//実際出力した文字数を返す
 }
 
-int print_u(unsigned int u)
+int print_u(unsigned int u, t_format fmt)
 {
-  ft_put_unsignedint_fd(u, 1);//文字数カウント処理
-  return (ft_unsignedint_len(u));
+  char  *str;
+  int len;
+
+  str = ft_utoa(u);//数値から文字列変換
+  len = print_format(str, fmt);//文字列を幅と揃えを適応して出力
+  free(str);
+  return (len);
 }
 
 int print_p(void *ptr)

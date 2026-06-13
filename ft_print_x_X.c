@@ -6,19 +6,30 @@
 /*   By: omito <omito@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/13 10:10:24 by omito             #+#    #+#             */
-/*   Updated: 2026/06/13 10:41:42 by omito            ###   ########.fr       */
+/*   Updated: 2026/06/13 12:20:47 by omito            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int print_x(unsigned int u)
+int print_x(unsigned int u, t_format fmt)
 {
-  ft_puthex_lowercase_fd(u, 1);
-  return (ft_hexlen(u));
+  char  *str;
+  int len;
+
+  str = ft_xtoa(u, "0123456789abcdef");//数値から文字列変換
+  len = print_format(str, fmt);//文字列を幅と揃えを適応して出力
+  free(str);
+  return (len);//実際出力した文字数を返す
 }
-int print_upper_x(unsigned int u)
+
+int print_upper_x(unsigned int u, t_format fmt)
 {
-  ft_puthex_uppercase_fd(u, 1);
-  return (ft_hexlen(u));
+  char  *str;
+  int len;
+
+  str = ft_xtoa(u, "0123456789ABCDEF");//数値から文字列変換
+  len = print_format(str, fmt);//文字列を幅と揃えを適応して出力
+  free(str);
+  return (len);//実際出力した文字数を返す
 }
