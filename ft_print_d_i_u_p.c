@@ -34,7 +34,7 @@ int print_u(unsigned int u, t_format fmt)
   return (len);
 }
 
-int print_p(void *ptr)
+int print_p(void *ptr)//intでもcharでもどんな型でいいのでアドレスがほしいからvoid*
 {
   if (ptr == NULL)//ポインタのヌルはガード必須
   {
