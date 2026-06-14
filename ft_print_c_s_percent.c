@@ -11,13 +11,13 @@
 /* ************************************************************************** */
 #include "ft_printf.h"
 
-int print_c(int c)//var_argで取り出したchar１文字を出力して、出力した文字数をリターン
+int print_c(int c, t_format fmt)//var_argで取り出したchar１文字を出力して、出力した文字数をリターン
 {
   ft_putchar_fd(c, 1);
   return (1);
 }
 
-int print_s(char *s)
+int print_s(char *s, t_format fmt)
 {
   if (s == NULL)//本物は％ｓがヌルだったら(null)と出力する
   s = "(null)";
@@ -25,7 +25,7 @@ int print_s(char *s)
   return (ft_strlen(s));
 }
 
-int print_percent(void)
+int print_percent(void)//%%は常に％１文字出力するだけ。フラグいらない
 {
   write(1, "%", 1);
   return (1);
